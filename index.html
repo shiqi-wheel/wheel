@@ -93,7 +93,12 @@
     font-size: 34px; font-weight: 900; color: #d84315;
     text-shadow: 0 1px 0 #fff;
   }
-  .modal .desc { font-size: 15px; font-weight: 800; color: #5d4037; line-height: 1.55; margin-bottom: 24px; }
+  .modal .desc {
+    font-size: 15px; font-weight: 800; color: #5d4037; line-height: 1.55;
+    margin-bottom: 24px; white-space: pre-wrap; word-break: break-word;
+    max-height: min(48vh, 360px); overflow-y: auto; overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch; padding-right: 4px;
+  }
   .modal button {
     width: 100%; padding: 13px 0;
     border: none; border-radius: 999px;
@@ -274,7 +279,14 @@
    desc   中奖后弹窗里的说明
    weight 中奖权重，0 = 永远抽不到；数字越大越容易中
    DAILY_LIMIT 抽奖次数限制，0 = 不限制                     */
-const PRIZES = [
+const QUERY_PARAMS = new URLSearchParams(location.search);
+const WHEEL_TYPE = ['lock', 'task', 'punish'].includes((QUERY_PARAMS.get('w') || QUERY_PARAMS.get('wheel') || 'lock').toLowerCase())
+  ? (QUERY_PARAMS.get('w') || QUERY_PARAMS.get('wheel') || 'lock').toLowerCase()
+  : 'lock';
+const WHEEL_CONFIG = {
+  lock: {
+    title: '拾柒的幸运大转盘', subtitle: '锁盘 · 点击开始 · 好运连连',
+    prizes: [
   { name: '1', desc: '无条件加时3天', weight: 20 },
   { name: '2', desc: '当下天数翻倍', weight: 20 },
   { name: '3', desc: '电击十分钟 低档', weight: 20 },
@@ -295,7 +307,22 @@ const PRIZES = [
   { name: '18', desc: '查抖音收藏与喜欢 擦边视频一个一天', weight: 20 },
   { name: '19', desc: '关注列表 同类型一个三天', weight: 20 },
   { name: '20', desc: '钥匙盒放面前 看女主丝袜视频抽插屁股', weight: 20 },
-];
+]
+  },
+  task: {
+    title: '拾柒的任务大转盘', subtitle: '任务盘 · 100 个任务 · 均匀概率',
+    prizes: Array.from({ length: 100 }, (_, i) => ({
+      name: String(i + 1), desc: '任务' + (i + 1) + '：描述待配置', weight: 20
+    }))
+  },
+  punish: {
+    title: '拾柒的惩罚大转盘', subtitle: '惩罚盘 · 50 个惩罚 · 均匀概率',
+    prizes: Array.from({ length: 50 }, (_, i) => ({
+      name: String(i + 1), desc: '惩罚' + (i + 1) + '：描述待配置', weight: 20
+    }))
+  }
+};
+const PRIZES = WHEEL_CONFIG[WHEEL_TYPE].prizes;
 const DAILY_LIMIT = 0;      /* 一次性逻辑由下方链接口令控制，保持 0 即可 */
 const SPIN_MS = 4600;       /* 转动时长（毫秒），越大越慢 */
 const TURNS   = 7;          /* 基本圈数（会额外加随机角度） */
@@ -354,6 +381,17 @@ function drawWheel(t) {
 
     const mid = ((i + 0.5) * SEG - 90) * Math.PI / 180;
     ctx.save();
+    if (N > 36) {
+      // 任务盘/惩罚盘扇区很窄：数字沿半径方向绘制，避免 1-100 标签互相叠死。
+      ctx.rotate(mid);
+      const smallSize = Math.max(5, Math.min(9, w * 0.021));
+      ctx.font = font(smallSize);
+      ctx.textAlign = 'right';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(PRIZES[i].name, r - 20, 0);
+      ctx.restore();
+      continue;
+    }
     ctx.rotate(mid + Math.PI / 2);
     let size = Math.max(12, w * 0.055);
     const font = s => `700 ${s}px -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif`;
@@ -401,8 +439,11 @@ function pickWinner() {
 /* ---------- 云端一次性口令：一个口令 = 全局一次抽奖 ----------
    管理员在 admin.html 生成口令链接；FC 端全局作废。 */
 const API_BASE = 'https://shiqi-wheel-web-cplglfykfg.cn-shanghai.fcapp.run';
-const URL_TOKEN = new URLSearchParams(location.search).get('t') || ''; /* FC will replace this line for ?t= links downloaded as local HTML. */
+const URL_TOKEN = QUERY_PARAMS.get('t') || ''; /* FC will replace this line for ?t= links downloaded as local HTML. */
 const CLIENT_ID_KEY = 'shiqi_wheel_cloud_client_id';
+document.querySelector('.page h1').textContent = WHEEL_CONFIG[WHEEL_TYPE].title;
+document.querySelector('.subtitle').textContent = WHEEL_CONFIG[WHEEL_TYPE].subtitle;
+document.title = WHEEL_CONFIG[WHEEL_TYPE].title;
 let unlocked = false;
 let spinningRequest = false;
 
@@ -502,8 +543,13 @@ async function spin(target) {
 }
 
 function showResult(i) {
+  document.title = WHEEL_CONFIG[WHEEL_TYPE].title;
+  document.querySelector('.page h1').textContent = WHEEL_CONFIG[WHEEL_TYPE].title;
+  document.querySelector('.subtitle').textContent = WHEEL_CONFIG[WHEEL_TYPE].subtitle;
   document.getElementById('prizeName').textContent = PRIZES[i].name;
-  document.getElementById('prizeDesc').textContent = PRIZES[i].desc || '';
+  const descEl = document.getElementById('prizeDesc');
+  descEl.textContent = PRIZES[i].desc || '';
+  descEl.scrollTop = 0;
   addHistory(PRIZES[i]);
   mask.classList.add('show');
   confetti();
