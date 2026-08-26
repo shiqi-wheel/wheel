@@ -312,13 +312,13 @@ const WHEEL_CONFIG = {
   task: {
     title: '拾柒的任务大转盘', subtitle: '任务盘 · 100 个任务 · 均匀概率',
     prizes: Array.from({ length: 100 }, (_, i) => ({
-      name: String(i + 1), desc: '任务' + (i + 1) + '：描述待配置', weight: 20
+      name: String(i + 1), desc: '暂无，等待填入', weight: 20
     }))
   },
   punish: {
     title: '拾柒的惩罚大转盘', subtitle: '惩罚盘 · 50 个惩罚 · 均匀概率',
     prizes: Array.from({ length: 50 }, (_, i) => ({
-      name: String(i + 1), desc: '惩罚' + (i + 1) + '：描述待配置', weight: 20
+      name: String(i + 1), desc: '暂无，等待填入', weight: 20
     }))
   }
 };
@@ -386,6 +386,7 @@ function drawWheel(t) {
       ctx.rotate(mid);
       const smallSize = Math.max(5, Math.min(9, w * 0.021));
       ctx.font = font(smallSize);
+      ctx.fillStyle = (i % 2 === 0) ? '#7a1f00' : '#ffffff';
       ctx.textAlign = 'right';
       ctx.textBaseline = 'middle';
       ctx.fillText(PRIZES[i].name, r - 20, 0);
