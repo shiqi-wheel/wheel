@@ -285,7 +285,7 @@ const WHEEL_TYPE = ['lock', 'task', 'punish'].includes((QUERY_PARAMS.get('w') ||
   : 'lock';
 const WHEEL_CONFIG = {
   lock: {
-    title: '拾柒的幸运大转盘', subtitle: '锁盘 · 20 个选项 · 权重概率',
+    title: '拾柒的幸运大转盘', subtitle: '锁盘 · 21 个选项 · 权重概率',
     prizes: [
       { name: '1', desc: '加时1天', weight: 20 },
       { name: '2', desc: '加时3天', weight: 20 },
@@ -306,11 +306,12 @@ const WHEEL_CONFIG = {
       { name: '17', desc: '释放日提前一周', weight: 20 },
       { name: '18', desc: '全部清零重置，重新计时', weight: 20 },
       { name: '19', desc: '释放日改为主随时通知', weight: 20 },
-      { name: '20', desc: '锁永久', weight: 50 },
+      { name: '20', desc: '加时到主满意为止', weight: 20 },
+      { name: '21', desc: '锁永久', weight: 50 },
     ],
   },
   task: {
-    title: '拾柒的任务大转盘', subtitle: '任务盘 · 157 个任务 · 均匀概率',
+    title: '拾柒的任务大转盘', subtitle: '任务盘 · 155 个任务 · 均匀概率',
     prizes: [
       { name: '1', desc: '嘴含黄瓜外出购物配合电击', weight: 20 },
       { name: '2', desc: '强化跪姿', weight: 20 },
@@ -463,12 +464,10 @@ const WHEEL_CONFIG = {
       { name: '149', desc: '奖励强制高潮 2 次后立刻冰水刺激', weight: 20 },
       { name: '150', desc: '奖励灌肠 + 肛塞 + 振动器内部刺激', weight: 20 },
       { name: '151', desc: '奖励强制吞精 + 锁精环 72 小时不取', weight: 20 },
-      { name: '152', desc: '加时到主满意为止', weight: 20 },
-      { name: '153', desc: '释放日改为"主随时通知"', weight: 20 },
-      { name: '154', desc: '加时一年', weight: 20 },
-      { name: '155', desc: '跪爬过客厅（按主指定路线）', weight: 20 },
-      { name: '156', desc: '失去自主选择权一周（吃什么穿什么做什么都由主定）', weight: 20 },
-      { name: '157', desc: '每次释放后必须写详细报告上交', weight: 20 },
+      { name: '152', desc: '释放日改为"主随时通知"', weight: 20 },
+      { name: '153', desc: '跪爬过客厅（按主指定路线）', weight: 20 },
+      { name: '154', desc: '失去自主选择权一周（吃什么穿什么做什么都由主定）', weight: 20 },
+      { name: '155', desc: '每次释放后必须写详细报告上交', weight: 20 },
     ],
   },
   punish: {
