@@ -285,7 +285,7 @@ const WHEEL_TYPE = ['lock', 'task', 'punish'].includes((QUERY_PARAMS.get('w') ||
   : 'lock';
 const WHEEL_CONFIG = {
   lock: {
-    title: '拾柒的幸运大转盘', subtitle: '锁盘 · 21 个选项 · 权重概率',
+    title: '拾柒的幸运大转盘', subtitle: '锁盘 · 30 个选项 · 权重概率',
     prizes: [
       { name: '1', desc: '加时1天', weight: 20 },
       { name: '2', desc: '加时3天', weight: 20 },
@@ -308,6 +308,15 @@ const WHEEL_CONFIG = {
       { name: '19', desc: '释放日改为主随时通知', weight: 20 },
       { name: '20', desc: '加时到主满意为止', weight: 20 },
       { name: '21', desc: '锁永久', weight: 10 },
+      { name: '22', desc: '加20天  电击2小时', weight: 20 },
+      { name: '23', desc: '加一个月 电击1小时', weight: 20 },
+      { name: '24', desc: '加俩月  肛塞半天', weight: 20 },
+      { name: '25', desc: '加三个月  震动棒高潮三次憋回去', weight: 20 },
+      { name: '26', desc: '加21天  贴字逛街或工作一天', weight: 20 },
+      { name: '27', desc: '释放日向后延期3天', weight: 20 },
+      { name: '28', desc: '开锁两分钟   一分钟内带上 超时一分加6天', weight: 20 },
+      { name: '29', desc: '加时22天   喝三瓶水憋尿一天（早中晚饭后上厕所）', weight: 20 },
+      { name: '30', desc: '加时25天   屁股塞姜2小时', weight: 20 },
     ],
   },
   task: {
